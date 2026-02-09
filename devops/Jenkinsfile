@@ -1,0 +1,48 @@
+pipeline {
+  // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
+  //agent any
+  
+  agent {
+    docker {
+      image 'maven:3.8.6-openjdk-11-slim'
+      args '-u root'
+    }
+  }  
+
+  stages {
+    stage('Info') {
+      steps {
+        echo "Job: ${env.JOB_NAME}"
+        echo "Build: ${env.BUILD_NUMBER}"
+        echo "Branch: ${env.BRANCH_NAME}"
+      }
+    }
+    
+    stage('Test') {
+      steps {
+        sh 'mvn -version'
+        sh 'mvn test'
+      }
+    }
+    stage('Prepare') {
+        steps {
+            // Las imágenes slim de Java tampoco suelen traer 'make'
+            sh 'apt-get update && apt-get install -y make'
+        }
+    }
+
+    stage('CI - Lint') {
+      steps {
+        // Actualizamos e instalamos make
+         // sh 'apt-get update && apt-get install -y make'
+         sh 'make lint'
+      }
+    }
+    
+    stage('CI - Test') {
+      steps {       
+         sh 'make test'
+      }
+    }
+  }
+}
