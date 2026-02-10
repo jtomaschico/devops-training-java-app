@@ -1,3 +1,7 @@
+def runInDocker(String image, Closure body) {
+  // TODO (E4): Ejecuta `body()` dentro del contenedor indicado usando Docker Pipeline:
+  // docker.image(image).inside { body() }
+}
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
   //agent any
