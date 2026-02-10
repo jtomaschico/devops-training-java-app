@@ -41,6 +41,7 @@ pipeline {
       steps {
         // Actualizamos e instalamos make
          runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') {
+            sh 'apt-get update && apt-get install -y make'
             sh 'make lint'
          }
       }
