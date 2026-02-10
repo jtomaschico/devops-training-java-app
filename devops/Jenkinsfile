@@ -17,7 +17,6 @@ pipeline {
     
     stage('Test') {
       steps {
-        sh 'apt-get update && apt-get install -y make'
         sh 'mvn -version'
         sh 'mvn test'
       }
