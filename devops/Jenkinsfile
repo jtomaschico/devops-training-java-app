@@ -20,7 +20,7 @@ pipeline {
   }  
 
   stages {
-    stage('Info') {
+    /**stage('Info') {
       steps {
         echo "Job: ${env.JOB_NAME}"
         echo "Build: ${env.BUILD_NUMBER}"
@@ -39,19 +39,18 @@ pipeline {
             // Las imágenes slim de Java tampoco suelen traer 'make'
             sh 'apt-get update && apt-get install -y make'
         }
-    }
+    }*/
     stage('CI - Lint') {
       steps {
         // Actualizamos e instalamos make
-         runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') { sh 'make lint' }
-         //sh 'make lint'
+         //runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') { sh 'make lint' }
+         sh 'make lint'
       }
     }
     
     stage('CI - Test') {
       steps {
-         runInDocker('maven:3.8.6-openjdk-11-slim') { sh 'make test' }
-         //sh 'make test'
+         sh 'make test'
       }
     }
   }
