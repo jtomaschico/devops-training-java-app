@@ -1,10 +1,13 @@
-def runInDocker(String image, String args = '', Closure body) {
+/*def runInDocker(String image, String args = '', Closure body) {
     body.resolveStrategy = Closure.DELEGATE_FIRST
     docker.image(image).inside(args) {
         body()
     }
+}*/
+def runInDocker(String image, Closure body) {
+  // TODO (E4): Ejecuta `body()` dentro del contenedor indicado usando Docker Pipeline:
+   docker.image(image).inside { body() }
 }
-
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
   agent any
@@ -17,7 +20,7 @@ pipeline {
   }*/  
 
   stages {
-    /**stage('Info') {
+    stage('Info') {
       steps {
         echo "Job: ${env.JOB_NAME}"
         echo "Build: ${env.BUILD_NUMBER}"
@@ -30,26 +33,24 @@ pipeline {
         sh 'mvn -version'
         sh 'mvn test'
       }
-    }*/
-    stage('Prepare') {
-        steps {
-            // Las imágenes slim de Java tampoco suelen traer 'make'
-            sh 'apt-get update && apt-get install -y make'
-        }
     }
     stage('CI - Lint') {
       steps {
         // Actualizamos e instalamos make
-         runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') {
+         //runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') {
+         runInDocker('maven:3.8.6-openjdk-11-slim') { 
             sh 'apt-get update && apt-get install -y make'
             sh 'make lint'
          }
       }
     }
-    /*stage('CI - Test') {
+    stage('CI - Test') {
       steps {
-         sh 'make test'
+         runInDocker('maven:3.8.6-openjdk-11-slim') { 
+            sh 'apt-get update && apt-get install -y make' 
+            sh 'make test'
+         }    
       }
-    }*/
+    }
   }
 }
