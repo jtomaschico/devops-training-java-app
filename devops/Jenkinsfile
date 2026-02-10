@@ -1,16 +1,17 @@
 def runInDocker(String image, Closure body) {
+   args '-u root'
    docker.image(image).inside { body() }
 }
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
-  agent any
+  //agent any
   
-  /*agent {
+  agent {
     docker {
       image 'maven:3.8.6-openjdk-11-slim'
       args '-u root'
     }
-  } */ 
+  }  
 
   stages {
     stage('Info') {
@@ -32,12 +33,6 @@ pipeline {
             // Las imágenes slim de Java tampoco suelen traer 'make'
             sh 'apt-get update && apt-get install -y make'
         }
-    }
-    stage('Docker OK?') {
-      steps {
-        sh 'docker --version'
-        sh 'docker ps'
-      }
     }
     stage('CI - Lint') {
       steps {
