@@ -37,8 +37,8 @@ pipeline {
     stage('CI - Lint') {
       steps {
         // Actualizamos e instalamos make
-         // sh 'apt-get update && apt-get install -y make'
-         sh 'make lint'
+         runInDocker('maven:3.8.6-openjdk-11-slim') { sh 'make lint' }
+         //sh 'make lint'
       }
     }
     
