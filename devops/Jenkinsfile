@@ -6,13 +6,6 @@ pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
   agent any
 
-  agent {
-    docker {
-      image 'maven:3.8.6-openjdk-11-slim'
-      args '-u root'
-    }
-  }  
-
   stages {
     stage('Info') {
       steps {
@@ -24,10 +17,12 @@ pipeline {
     
     stage('Test') {
       steps {
-        sh 'mvn -version'
-        sh 'mvn test'
+        runInDocker('maven:3.8.6-openjdk-11-slim') {
+          sh 'mvn -version'
+          sh 'mvn test'
+        }
       }
-    }
+    }  
     stage('CI - Lint') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
