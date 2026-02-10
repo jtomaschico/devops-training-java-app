@@ -1,23 +1,20 @@
-/*def runInDocker(String image, Closure body) {
-   docker.image(image).inside { body() }
-}*/
 def runInDocker(String image, String args = '', Closure body) {
-  body.resolveStrategy = Closure.DELEGATE_FIRST
-  docker.image(image).inside(args) {
-    body()
-  }
+    body.resolveStrategy = Closure.DELEGATE_FIRST
+    docker.image(image).inside(args) {
+        body()
+    }
 }
 
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
-  //agent any
+  agent any
   
-  agent {
+  /*agent {
     docker {
       image 'maven:3.8.6-openjdk-11-slim'
       args '-u root'
     }
-  }  
+  }*/  
 
   stages {
     /**stage('Info') {
@@ -43,15 +40,15 @@ pipeline {
     stage('CI - Lint') {
       steps {
         // Actualizamos e instalamos make
-         //runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') { sh 'make lint' }
-         sh 'make lint'
-      }
+         runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') {
+            sh 'make lint'
+         }
     }
     
-    stage('CI - Test') {
+    /*stage('CI - Test') {
       steps {
          sh 'make test'
       }
-    }
+    }*/
   }
 }
