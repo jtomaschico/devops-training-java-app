@@ -1,7 +1,13 @@
-def runInDocker(String image, Closure body) {
-   args '-u root'
+/*def runInDocker(String image, Closure body) {
    docker.image(image).inside { body() }
+}*/
+def runInDocker(String image, String args = '', Closure body) {
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  docker.image(image).inside(args) {
+    body()
+  }
 }
+
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
   //agent any
@@ -37,7 +43,7 @@ pipeline {
     stage('CI - Lint') {
       steps {
         // Actualizamos e instalamos make
-         runInDocker('maven:3.8.6-openjdk-11-slim') { sh 'make lint' }
+         runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') { sh 'make lint' }
          //sh 'make lint'
       }
     }
