@@ -43,8 +43,8 @@ pipeline {
          runInDocker('maven:3.8.6-openjdk-11-slim', '-u root') {
             sh 'make lint'
          }
+      }
     }
-    
     /*stage('CI - Test') {
       steps {
          sh 'make test'
