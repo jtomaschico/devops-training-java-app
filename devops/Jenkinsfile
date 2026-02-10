@@ -1,5 +1,9 @@
+/*def runInDocker(String image, Closure body) {
+   docker.image(image).inside { body() }
+}*/
 def runInDocker(String image, Closure body) {
    docker.image(image).inside { body() }
+   docker.args '-u root'
 }
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
