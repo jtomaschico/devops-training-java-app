@@ -4,14 +4,14 @@ def runInDocker(String image, Closure body) {
 }
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
-  //agent any
+  agent any
 
-  agent {
+  /*agent {
     docker {
       image 'maven:3.8.6-openjdk-11-slim'
       args '-u root'
     }
-  }  
+  }*/  
 
   stages {
     stage('Info') {
