@@ -33,37 +33,43 @@ pipeline {
     
     stage('Test') {
       steps {
-        runInDocker('maven:3.9.6-eclipse-temurin-17') {
-          sh 'mvn -version'
-          sh 'mvn test'
-        }
+        script {
+           runInDocker('maven:3.9.6-eclipse-temurin-17') {
+             sh 'mvn -version'
+             sh 'mvn test'
+           }
+        }   
       }
     }
 
     stage('CI - Lint') {
       steps {
-         runInDocker('maven:3.9.6-eclipse-temurin-17') { 
-            sh 'apt-get update && apt-get install -y make'
-            sh 'make lint'
-         }
+         script {
+            runInDocker('maven:3.9.6-eclipse-temurin-17') { 
+               sh 'apt-get update && apt-get install -y make'
+               sh 'make lint'
+            }
+         }   
       }
     }
      
     stage('CI - Test') {
       steps {
-         runInDocker('maven:3.9.6-eclipse-temurin-17') { 
-            sh 'apt-get update && apt-get install -y make' 
-            sh 'make test'
-         }    
+         script {
+            runInDocker('maven:3.9.6-eclipse-temurin-17') { 
+               sh 'apt-get update && apt-get install -y make' 
+               sh 'make test'
+            }  
+         }  
       }
     }
      
-    /*stage('CI - Build image') {
+    stage('CI - Build image') {
       steps {
         script {
           docker.build(env.IMAGE_LOCAL, "--build-arg VERSION=${env.VERSION_JAR} -f devops/Dockerfile .") 
         }
       }
-    }*/
+    }
   }
 }
