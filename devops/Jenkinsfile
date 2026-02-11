@@ -9,7 +9,6 @@ pipeline {
      APP_URL = 'http://localhost:8084/hello'
      CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
      IMAGE_REPO_LOCAL = 'scalian_training-java-hello-world'
-     PATH = "/usr/share/maven/bin:${env.PATH}"
   }
 
   stages {
@@ -18,7 +17,6 @@ pipeline {
           echo "Job: ${env.JOB_NAME}"
           echo "Build: ${env.BUILD_NUMBER}"
           echo "Branch: ${env.BRANCH_NAME}"
-          echo "maven path: ${env.PATH}"
         }
      }
 
@@ -32,15 +30,23 @@ pipeline {
         }
       }
     }
+
+    stage('CI - Build tools image') {
+      steps {
+        script {
+          docker.build(env.CI_IMAGE, "-f devops/ci.Dockerfile .")
+        }
+      }
+    }
     
-    /*stage('Test') {
+    stage('Test') {
       steps {
         runInDocker('maven:3.8.6-openjdk-11-slim') {
           sh 'mvn -version'
           sh 'mvn test'
         }
       }
-    }*/
+    }
 
     stage('CI - Lint') {
       steps {
