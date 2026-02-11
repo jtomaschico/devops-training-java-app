@@ -31,10 +31,10 @@ pipeline {
       }
     }
     
-    /*stage('Test') {
+    stage('Test') {
       steps {
         script {
-           runInDocker('maven:3.9.6-eclipse-temurin-17') {
+           runInDocker(env.CI_IMAGE) {
              sh 'mvn -version'
              sh 'mvn test'
            }
@@ -45,7 +45,7 @@ pipeline {
     stage('CI - Lint') {
       steps {
          script {
-            runInDocker('maven:3.9.6-eclipse-temurin-17') { 
+            runInDocker(env.CI_IMAGE) { 
                sh 'apt-get update && apt-get install -y make'
                sh 'make lint'
             }
@@ -56,13 +56,13 @@ pipeline {
     stage('CI - Test') {
       steps {
          script {
-            runInDocker('maven:3.9.6-eclipse-temurin-17') { 
+            runInDocker(env.CI_IMAGE) { 
                sh 'apt-get update && apt-get install -y make' 
                sh 'make test'
             }  
          }  
       }
-    }*/
+    }
      
     stage('CI - Build image') {
       steps {
