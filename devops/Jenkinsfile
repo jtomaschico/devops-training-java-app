@@ -38,5 +38,13 @@ pipeline {
          }    
       }
     }
+    stage('CI - Build image') {
+      steps {
+        script {
+          docker.build('maven:3.8.6-openjdk-11-slim', "--build-arg VERSION=... -f devops/Dockerfile .")
+        }
+      }
+    }
+ 
   }
 }
