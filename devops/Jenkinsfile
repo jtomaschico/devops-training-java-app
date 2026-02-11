@@ -1,13 +1,17 @@
+def runInDocker(String image, Closure body) {
+  // TODO (E4): Ejecuta `body()` dentro del contenedor indicado usando Docker Pipeline:
+   docker.image(image).inside { body() }
+}
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
-  agent any
-  
-  /*agent {
+  //agent any
+
+  agent {
     docker {
       image 'maven:3.8.6-openjdk-11-slim'
       args '-u root'
     }
-  } */ 
+  }  
 
   stages {
     stage('Info') {
@@ -17,40 +21,33 @@ pipeline {
         echo "Branch: ${env.BRANCH_NAME}"
       }
     }
-    
+
     stage('Test') {
       steps {
         sh 'mvn -version'
         sh 'mvn test'
+        runInDocker('maven:3.8.6-openjdk-11-slim') {
+          sh 'mvn -version'
+          sh 'mvn test'
+        }
       }
     }
-    stage('Prepare') {
-        steps {
-            // Las imágenes slim de Java tampoco suelen traer 'make'
-            sh 'apt-get update && apt-get install -y make'
-        }
-    }
-
+    }  
     stage('CI - Lint') {
       steps {
-        // Actualizamos e instalamos make
-         // sh 'apt-get update && apt-get install -y make'
-         sh 'make lint'
+         runInDocker('maven:3.8.6-openjdk-11-slim') { 
+            sh 'apt-get update && apt-get install -y make'
+            sh 'make lint'
+         }
       }
     }
-    
     stage('CI - Test') {
-      steps {       
-         sh 'make test'
+      steps {
+         runInDocker('maven:3.8.6-openjdk-11-slim') { 
+            sh 'apt-get update && apt-get install -y make' 
+            sh 'make test'
+         }    
       }
     }
-
-    /*stage('CI - Build image') {
-      steps {
-        script {
-          docker.build(env.IMAGE_NAME, "--build-arg VERSION=... -f devops/Dockerfile .")
-        }
-      }
-    }*/
   }
 }
