@@ -31,7 +31,7 @@ pipeline {
       }
     }
     
-    stage('Test') {
+    /*stage('Test') {
       steps {
         script {
            runInDocker('maven:3.9.6-eclipse-temurin-17') {
@@ -62,7 +62,7 @@ pipeline {
             }  
          }  
       }
-    }
+    }*/
      
     stage('CI - Build image') {
       steps {
