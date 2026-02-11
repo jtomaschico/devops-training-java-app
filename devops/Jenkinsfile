@@ -9,6 +9,7 @@ pipeline {
      APP_URL = 'http://localhost:8084/hello'
      CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
      IMAGE_REPO_LOCAL = 'scalian_training-java-hello-world'
+     PATH = "/usr/share/maven/bin:${env.PATH}"
   }
 
   stages {
@@ -40,27 +41,14 @@ pipeline {
       }
     }*/
 
-    stage('CI - Lint 1') {
-        agent {
-          docker {
-            image 'maven:3.8.6-openjdk-11-slim'
-          }
-        }
-        steps {
-          sh 'apt-get update'
-          sh 'apt-get install -y make'
-          sh 'make lint'
-        }
-     }
- 
-    /*stage('CI - Lint') {
+    stage('CI - Lint') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
             sh 'apt-get update && apt-get install -y make'
             sh 'make lint'
          }
       }
-    }*/
+    }
      
     /*stage('CI - Test') {
       steps {
