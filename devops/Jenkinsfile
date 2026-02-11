@@ -42,7 +42,7 @@ pipeline {
 
     stage('CI - Lint') {
       steps {
-         runInDocker('maven:3.8.6-openjdk-11-slim') { 
+         runInDocker('maven:3.9.6-eclipse-temurin-17') { 
             sh 'apt-get update && apt-get install -y make'
             sh 'make lint'
          }
