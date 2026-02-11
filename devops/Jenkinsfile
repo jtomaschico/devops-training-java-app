@@ -33,7 +33,7 @@ pipeline {
     
     stage('Test') {
       steps {
-        runInDocker('maven:3.8.6-openjdk-11-slim') {
+        runInDocker('maven:3.9.6-eclipse-temurin-17') {
           sh 'mvn -version'
           sh 'mvn test'
         }
