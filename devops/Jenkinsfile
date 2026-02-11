@@ -7,7 +7,8 @@ pipeline {
 
   environment {
      APP_URL = 'http://localhost:8084/hello'
-     CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
+     //CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
+     CI_IMAGE =  'maven:3.9.6-eclipse-temurin-17'
      IMAGE_REPO_LOCAL = 'scalian_training-java-hello-world'
   }
 
