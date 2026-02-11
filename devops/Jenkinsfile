@@ -61,7 +61,6 @@ pipeline {
           docker.build(env.IMAGE_LOCAL, "--build-arg VERSION=${env.VERSION_JAR} -f devops/Dockerfile .") 
         }
       }
-    }
- 
-  }*/
+    }*/
+  }
 }
