@@ -8,6 +8,7 @@ pipeline {
    environment {
      APP_URL = 'http://localhost:8084/hello'
      CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
+     IMAGE_REPO_LOCAL = 'scalian_training-java-hello-world'
   }
 
   stages {
@@ -19,16 +20,18 @@ pipeline {
       }
     }
 
-     stage('Init - Versionado') {
+     stage('Versioning') {
       steps {
         script {
            env.IMAGE_VERSION = devopsLib.readVersion('VERSION')
            env.VERSION_JAR = "${env.IMAGE_VERSION}-SNAPSHOT"
+           env.IMAGE_LOCAL = "${env.IMAGE_REPO_LOCAL}:${env.IMAGE_VERSION}"
+           //env.IMAGE_REGISTRY = "${env.REGISTRY_HOST}/${env.REGISTRY_REPO}:${env.IMAGE_VERSION}"
         }
       }
     }
     
-    stage('Test') {
+    /*stage('Test') {
       steps {
         runInDocker('maven:3.8.6-openjdk-11-slim') {
           sh 'mvn -version'
@@ -60,5 +63,5 @@ pipeline {
       }
     }
  
-  }
+  }*/
 }
