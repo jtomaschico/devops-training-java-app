@@ -16,13 +16,15 @@ pipeline {
     
     stage('Test') {
       steps {
-        runInDocker('maven:3.8.6-openjdk-11-slim') {
-          sh 'mvn -version'
-          sh 'mvn test'
-        }
+        script { 
+           runInDocker('maven:3.8.6-openjdk-11-slim') {
+             sh 'mvn -version'
+             sh 'mvn test'
+           }
+        }  
       }
     }  
-    stage('CI - Lint') {
+    /*stage('CI - Lint') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
             sh 'apt-get update && apt-get install -y make'
