@@ -12,13 +12,13 @@ pipeline {
   }
 
   stages {
-    stage('Info') {
-      steps {
-        echo "Job: ${env.JOB_NAME}"
-        echo "Build: ${env.BUILD_NUMBER}"
-        echo "Branch: ${env.BRANCH_NAME}"
-      }
-    }
+     stage('Info') {
+        steps {
+          echo "Job: ${env.JOB_NAME}"
+          echo "Build: ${env.BUILD_NUMBER}"
+          echo "Branch: ${env.BRANCH_NAME}"
+        }
+     }
 
      stage('Versioning') {
       steps {
@@ -40,6 +40,7 @@ pipeline {
         }
       }
     }  
+     
     stage('CI - Lint') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
@@ -48,6 +49,7 @@ pipeline {
          }
       }
     }
+     
     stage('CI - Test') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
@@ -56,6 +58,7 @@ pipeline {
          }    
       }
     }
+     
     stage('CI - Build image') {
       steps {
         script {
