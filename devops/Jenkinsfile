@@ -31,7 +31,7 @@ pipeline {
       }
     }
     
-    /*stage('Test') {
+    stage('Test') {
       steps {
         runInDocker('maven:3.8.6-openjdk-11-slim') {
           sh 'mvn -version'
@@ -61,6 +61,6 @@ pipeline {
           docker.build(env.IMAGE_LOCAL, "--build-arg VERSION=${env.VERSION_JAR} -f devops/Dockerfile .") 
         }
       }
-    }*/
+    }
   }
 }
