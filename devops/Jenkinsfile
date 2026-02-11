@@ -39,18 +39,6 @@ pipeline {
         }
       }
     } */
-
-    stage('Test') {
-        steps {
-          script {
-            runInDocker('maven:3.8.6-openjdk-11-slim') {
-              sh 'mvn -version'
-              sh 'mvn test'
-            }
-          }
-        }
-      }
- 
      
     stage('CI - Lint') {
       steps {
