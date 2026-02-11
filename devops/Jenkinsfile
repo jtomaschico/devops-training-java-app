@@ -38,9 +38,9 @@ pipeline {
           sh 'mvn test'
         }
       }
-    } */
+    }*/
      
-    /*stage('CI - Lint') {
+    stage('CI - Lint') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
             sh 'apt-get update && apt-get install -y make'
@@ -49,14 +49,14 @@ pipeline {
       }
     }
      
-    stage('CI - Test') {
+    /*stage('CI - Test') {
       steps {
          runInDocker('maven:3.8.6-openjdk-11-slim') { 
             sh 'apt-get update && apt-get install -y make' 
             sh 'make test'
          }    
       }
-    }
+    }*/
      
     stage('CI - Build image') {
       steps {
@@ -64,6 +64,6 @@ pipeline {
           docker.build(env.IMAGE_LOCAL, "--build-arg VERSION=${env.VERSION_JAR} -f devops/Dockerfile .") 
         }
       }
-    }*/
+    }
   }
 }
