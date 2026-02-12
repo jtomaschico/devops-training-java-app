@@ -72,5 +72,32 @@ pipeline {
         }
       }
     }
+
+    stage('CD') {
+      when {
+        allOf {
+          anyOf {
+            branch 'develop'
+            branch 'main'
+          }
+          // TODO (E6.3): Solo ejecutar CD si RUN_CD es true
+        }
+      }
+      steps {
+        script {
+          // TODO (E6.2): Define DEPLOY_ENV (develop=DEV, master=PRO) y muestra logs.
+          docker compose up -> e2e curl -> docker compose down --volumes
+          // Recomendado: encapsular con composeUpTestDown(...) (E9).
+        }
+      }
+      post {
+        always {
+          // TODO (E6.5): Limpieza garantizada
+        }
+        success { echo 'SUCCESS' }
+        failure { echo 'FAILURE' }
+        }
+      }
+    } 
   }
 }
