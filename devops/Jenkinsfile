@@ -8,7 +8,7 @@ pipeline {
   environment {
      APP_URL = 'http://localhost:8084/hello'
      //CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
-     CI_IMAGE =  'maven:3.9.6-eclipse-temurin-17'
+     MVN_IMAGE =  'maven:3.9.6-eclipse-temurin-17'
      IMAGE_REPO_LOCAL = 'devops_training-java-app'
   }
 
@@ -35,7 +35,7 @@ pipeline {
     stage('Test') {
       steps {
         script {
-           runInDocker(env.CI_IMAGE) {
+           runInDocker(env.MVN_IMAGE) {
              sh 'mvn -version'
              sh 'mvn test'
            }
@@ -46,7 +46,7 @@ pipeline {
     stage('CI - Lint') {
       steps {
          script {
-            runInDocker(env.CI_IMAGE) { 
+            runInDocker(env.MVN_IMAGE) { 
                sh 'apt-get update && apt-get install -y make'
                sh 'make lint'
             }
@@ -57,7 +57,7 @@ pipeline {
     stage('CI - Test') {
       steps {
          script {
-            runInDocker(env.CI_IMAGE) { 
+            runInDocker(env.MVN_IMAGE) { 
                sh 'apt-get update && apt-get install -y make' 
                sh 'make test'
             }  
