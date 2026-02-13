@@ -81,9 +81,7 @@ pipeline {
               branch 'develop'
               branch 'main'
             }
-             echo "hola2"
             expression { return params.RUN_CD }
-             echo "hola3"
           }
         }
         steps {
