@@ -74,23 +74,27 @@ pipeline {
     }
 
     stage('CD') {
+       echo "hola"
         when {
           allOf {
             anyOf {
               branch 'develop'
               branch 'main'
             }
+             echo "hola2"
             expression { return params.RUN_CD }
+             echo "hola3"
           }
         }
         steps {
           script {
-      
+            echo "hola4"
             // Definir entorno de despliegue
             env.DEPLOY_ENV = (env.BRANCH_NAME == 'main') ? 'PRO' : 'DEV'
             echo "Deploy env: ${env.DEPLOY_ENV}"
       
             try {
+              echo "hola5" 
               sh 'docker compose up -d'
               sh 'sleep 5'
               sh 'curl -f http://localhost:8084/hello'
