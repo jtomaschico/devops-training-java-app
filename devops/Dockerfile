@@ -1,7 +1,8 @@
 #
 # Build stage
 #
-FROM maven:3.8.6-openjdk-11-slim as build
+#FROM maven:3.8.6-openjdk-11-slim as build
+FROM maven:3.9.6-eclipse-temurin-17 as build
 ARG VERSION=0.0.1-SNAPSHOT
 
 COPY ./src /home/app/src
@@ -21,6 +22,7 @@ RUN mvn install
 #
 # Package stage
 #
+
 FROM eclipse-temurin:11-jre-jammy
 ARG VERSION=0.0.1-SNAPSHOT
 COPY --from=build /home/app/target/spring-boot-2-hello-world-${VERSION}.jar /usr/local/lib/app.jar
