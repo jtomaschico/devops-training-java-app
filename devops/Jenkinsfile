@@ -84,6 +84,7 @@ pipeline {
           }
         }
         steps {
+          echo "hola4" 
           script {
             echo "hola4"
             // Definir entorno de despliegue
