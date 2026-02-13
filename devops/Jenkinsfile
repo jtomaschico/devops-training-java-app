@@ -14,7 +14,6 @@ pipeline {
      //CI_IMAGE = "java-ci-tools:${env.BUILD_NUMBER}"
      MVN_IMAGE =  'maven:3.9.6-eclipse-temurin-17'
      IMAGE_REPO_LOCAL = 'devops_training-java-app'
-     APP_URL = 'http://localhost:8084/hello'
   }
 
   stages {
