@@ -103,6 +103,11 @@ pipeline {
             } finally {
               sh 'docker compose down --volumes'
             }
+            devopsLib.composeUpTestDown(
+               up:   'docker compose up -d',
+               test: 'docker compose logs app', // Aquí tus tests o validaciones de CD
+               down: 'docker compose down --volumes'
+            ) 
           }
         }
         post {
