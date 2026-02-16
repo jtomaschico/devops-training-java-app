@@ -1,4 +1,4 @@
-//método para la ejecución de tareas en una imágen en docker
+//método para la ejecución de tareas en una imágen en docker, queda comentado al hacer ya uso de la librería
 /*def runInDocker(String image, Closure body) {
    docker.image(image).inside { body() }
 }*/
