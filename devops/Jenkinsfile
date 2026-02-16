@@ -1,6 +1,6 @@
-def runInDocker(String image, Closure body) {
+/*def runInDocker(String image, Closure body) {
    docker.image(image).inside { body() }
-}
+}*/
 @Library('iac-devops-lib') _
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
@@ -41,7 +41,7 @@ pipeline {
     stage('Test') {
       steps {
         script {
-           runInDocker(env.MVN_IMAGE) {
+           devopsLib.runInDocker(env.MVN_IMAGE) {
              sh 'mvn -version'
              sh 'mvn test'
            }
@@ -52,7 +52,7 @@ pipeline {
     stage('CI - Lint') {
       steps {
          script {
-            runInDocker(env.MVN_IMAGE) { 
+            devopsLib.runInDocker(env.MVN_IMAGE) { 
                sh 'apt-get update && apt-get install -y make'
                sh 'make lint'
             }
@@ -63,7 +63,7 @@ pipeline {
     stage('CI - Test') {
       steps {
          script {
-            runInDocker(env.MVN_IMAGE) { 
+            devopsLib.runInDocker(env.MVN_IMAGE) { 
                sh 'apt-get update && apt-get install -y make' 
                sh 'make test'
             }  
