@@ -1,6 +1,7 @@
 def runInDocker(String image, Closure body) {
    docker.image(image).inside { body() }
 }
+@Library('iac-devops-lib') _
 pipeline {
   // `agent any` = el pipeline se ejecuta en cualquier nodo/agente disponible.
   agent any
