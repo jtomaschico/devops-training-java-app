@@ -28,7 +28,8 @@ pipeline {
      stage('Versioning') {
       steps {
         script {
-           env.IMAGE_VERSION = "1.0.${env.BUILD_NUMBER}"
+           //env.IMAGE_VERSION = "1.0.${env.BUILD_NUMBER}"
+           env.IMAGE_VERSION = devopsLib.readVersion('VERSION')
            env.VERSION_JAR = "${env.IMAGE_VERSION}-SNAPSHOT"
            env.IMAGE_LOCAL = "${env.IMAGE_REPO_LOCAL}:${env.IMAGE_VERSION}"
            //env.IMAGE_REGISTRY = "${env.REGISTRY_HOST}/${env.REGISTRY_REPO}:${env.IMAGE_VERSION}"
