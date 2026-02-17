@@ -59,6 +59,11 @@ jobs:
           echo "REGISTRY_HOST: ${{ vars.REGISTRY_HOST }}"
           echo "REGISTRY_USER: ${{ secrets.REGISTRY_USER }}"
 
+      - name: Instalar make
+        run: |
+          apt-get update
+          apt-get install -y make
+          
       - name: Lint
         run: make lint
 
