@@ -22,6 +22,7 @@ env:
   # Variables de entorno globales:
   IMAGE_NAME: "scalian_training-java-app"
   APP_URL: "http://localhost:8084/hello"
+  DEPLOY_ENV: ${{ github.ref_name == 'master' && 'PRO' || 'DEV' }}
 jobs:
   ci:
     # nombre que veremos del job
@@ -39,6 +40,8 @@ jobs:
           echo "Ref:  $GITHUB_REF"
           echo "Branch: $GITHUB_REF_NAME"
           echo "RUN_CD: ${{ inputs.RUN_CD }}"
+          echo "Deploying to $DEPLOY_ENV"
+          
       - name: Usando variables en shell
         run: |
           echo "Image: $IMAGE_NAME"
