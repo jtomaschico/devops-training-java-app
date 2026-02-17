@@ -53,10 +53,9 @@ jobs:
         run: |
           echo "Registry host: $REGISTRY"
           echo "Artifactory URL: $ARTIFACTORY"
-
-      - name: Login al Registry
-        run: |
-          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ${{ vars.REGISTRY_HOST }} -u ${{ secrets.REGISTRY_USER }} --password-stdin    
+          echo "REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}"
+          echo "REGISTRY_HOST: ${{ vars.REGISTRY_HOST }}"
+          echo "REGISTRY_USER: ${{ secrets.REGISTRY_USER }}"
 
   cd:
     name: Continuous Deployment
