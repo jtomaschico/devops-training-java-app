@@ -18,7 +18,10 @@ on:
         required: false
         default: false
         type: boolean
-
+env:
+  # Variables de entorno globales:
+  IMAGE_NAME: "scalian_training-java-app"
+  APP_URL: "http://localhost:8084/hello"
 jobs:
   ci:
     # nombre que veremos del job
@@ -36,6 +39,10 @@ jobs:
           echo "Ref:  $GITHUB_REF"
           echo "Branch: $GITHUB_REF_NAME"
           echo "RUN_CD: ${{ inputs.RUN_CD }}"
+      - name: Usando variables en shell
+        run: |
+          echo "Image: $IMAGE_NAME"
+          echo "App URL: $APP_URL"   
 
   cd:
     name: Continuous Deployment
