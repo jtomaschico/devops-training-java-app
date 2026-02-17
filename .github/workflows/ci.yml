@@ -22,6 +22,8 @@ env:
   # Variables de entorno globales:
   IMAGE_NAME: "scalian_training-java-app"
   APP_URL: "http://localhost:8084/hello"
+  REGISTRY: ${{ vars.REGISTRY_HOST }}
+  ARTIFACTORY: ${{ vars.ARTIFACTORY_URL }}
   DEPLOY_ENV: ${{ github.ref_name == 'master' && 'PRO' || 'DEV' }}
 jobs:
   ci:
@@ -45,7 +47,16 @@ jobs:
       - name: Usando variables en shell
         run: |
           echo "Image: $IMAGE_NAME"
-          echo "App URL: $APP_URL"   
+          echo "App URL: $APP_URL" 
+
+      - name: Mostrar variables
+        run: |
+          echo "Registry host: $REGISTRY"
+          echo "Artifactory URL: $ARTIFACTORY"
+
+      - name: Login al Registry
+        run: |
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ${{ vars.REGISTRY_HOST }} -u ${{ secrets.REGISTRY_USER }} --password-stdin    
 
   cd:
     name: Continuous Deployment
