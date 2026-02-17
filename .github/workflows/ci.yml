@@ -30,6 +30,8 @@ jobs:
     # nombre que veremos del job
     name: Continuous Integration
     runs-on: ubuntu-latest
+    # Ejecutar el job en contenedor (Docker como agente):
+    container: maven:3.9.6-eclipse-temurin-17
     # definición de los diferentes pasos del job
     steps:
       # Descarga el código del repositorio dentro de la máquina virtual.
@@ -56,6 +58,12 @@ jobs:
           echo "REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}"
           echo "REGISTRY_HOST: ${{ vars.REGISTRY_HOST }}"
           echo "REGISTRY_USER: ${{ secrets.REGISTRY_USER }}"
+
+      - name: Lint
+        run: make lint
+
+      - name: Test
+        run: make test   
 
   cd:
     name: Continuous Deployment
