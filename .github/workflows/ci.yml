@@ -12,6 +12,7 @@ on:
 
   workflow_dispatch:
     inputs:
+     #definimos el parámetro de codición para ejecutar o no el job CD
       RUN_CD:
         description: 'Run Continuous Deployment'
         required: false
@@ -20,12 +21,15 @@ on:
 
 jobs:
   ci:
+    # nombre que veremos del job
     name: Continuous Integration
     runs-on: ubuntu-latest
+    # definición de los diferentes pasos del job
     steps:
+      # Descarga el código del repositorio dentro de la máquina virtual.
       - name: Checkout
         uses: actions/checkout@v4
-
+      
       - name: Mostrar contexto
         run: |
           echo "Repo: $GITHUB_REPOSITORY"
