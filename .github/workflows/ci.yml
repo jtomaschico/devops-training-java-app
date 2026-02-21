@@ -24,7 +24,7 @@ env:
   APP_URL: "http://localhost:8084/hello"
   REGISTRY: ${{ vars.REGISTRY_HOST }}
   ARTIFACTORY: ${{ vars.ARTIFACTORY_URL }}
-  DEPLOY_ENV: ${{ github.ref_name == 'master' && 'PRO' || 'DEV' }}
+  DEPLOY_ENV: ${{ github.ref_name == 'main' && 'PRO' || 'DEV' }}
 jobs:
   ci:
     # nombre que veremos del job
@@ -78,3 +78,27 @@ jobs:
     steps:
       - name: Deploy
         run: echo "🚀 Ejecutando CD..."
+
+      - name: Checkout
+        uses: actions/checkout@v4   
+
+      - name: Build image (por si no existe en runner)
+        run: |
+          docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
+
+      - name: Levantar servicios
+        run: docker compose up -d
+
+      - name: Esperar a que la app esté lista
+        run: sleep 5
+
+      - name: Test E2E con curl
+        run: |
+          curl -fsS $APP_URL  
+
+      - name: Cleanup (siempre)
+        if: always()
+        run: |
+          docker compose down --volumes || true
+          docker rmi "$IMAGE_NAME" || true
+          echo "TODO: cleanup"    
