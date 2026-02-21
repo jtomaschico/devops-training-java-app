@@ -18,6 +18,11 @@ on:
         required: false
         default: false
         type: boolean
+
+permissions:
+  contents: read
+  packages: write
+  
 env:
   # Variables de entorno globales:
   IMAGE_NAME: "scalian_training-java-app"
@@ -25,6 +30,7 @@ env:
   REGISTRY: ${{ vars.REGISTRY_HOST }}
   ARTIFACTORY: ${{ vars.ARTIFACTORY_URL }}
   DEPLOY_ENV: ${{ github.ref_name == 'main' && 'PRO' || 'DEV' }}
+  
 jobs:
   ci:
     # nombre que veremos del job
@@ -101,4 +107,22 @@ jobs:
         run: |
           docker compose down --volumes || true
           docker rmi "$IMAGE_NAME" || true
-          echo "TODO: cleanup"    
+          echo "TODO: cleanup"   
+
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          FULL_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:$IMAGE_TAG
+          echo "Building $FULL_IMAGE_NAME"
+          docker build -t $FULL_IMAGE_NAME -f devops/Dockerfile .
+      
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      
+      - name: Push Docker image
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          FULL_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:$IMAGE_TAG
+          docker push $FULL_IMAGE_NAME
+
+    
