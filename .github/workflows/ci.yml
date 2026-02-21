@@ -31,7 +31,6 @@ jobs:
     name: Continuous Integration
     runs-on: ubuntu-latest
     # Ejecutar el job en contenedor (Docker como agente):
-    #container: maven:3.9.6-eclipse-temurin-17
     container: maven:3.8.6-openjdk-11-slim
     # definición de los diferentes pasos del job
     steps:
@@ -75,7 +74,7 @@ jobs:
     name: Continuous Deployment
     runs-on: ubuntu-latest
     needs: ci
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.RUN_CD == true }}
+    if: ${{ (github.ref_name == 'develop' || github.ref_name == 'main') && github.event_name == 'workflow_dispatch' && inputs.RUN_CD == true }}
     steps:
       - name: Deploy
         run: echo "🚀 Ejecutando CD..."
