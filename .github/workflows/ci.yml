@@ -31,7 +31,8 @@ jobs:
     name: Continuous Integration
     runs-on: ubuntu-latest
     # Ejecutar el job en contenedor (Docker como agente):
-    container: maven:3.9.6-eclipse-temurin-17
+    #container: maven:3.9.6-eclipse-temurin-17
+    container: maven:3.8.6-openjdk-11-slim
     # definición de los diferentes pasos del job
     steps:
       # Descarga el código del repositorio dentro de la máquina virtual.
