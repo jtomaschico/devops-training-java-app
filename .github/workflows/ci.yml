@@ -39,8 +39,7 @@ jobs:
     runs-on: [self-hosted, linux, docker]
     #runs-on: [self-hosted, linux, docker]
     # Ejecutar el job en contenedor (Docker como agente):
-    #container: maven:3.8.6-openjdk-11-slim
-    container: ghcr.io/cosmincucu/maven-node:3.8.6-jdk-11-node-20
+    container: maven:3.8.6-openjdk-11-slim
     # definición de los diferentes pasos del job
     steps:
       # Descarga el código del repositorio dentro de la máquina virtual.
