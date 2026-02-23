@@ -2,7 +2,7 @@
 FROM maven:3.8.6-openjdk-11-slim as build
 
 # Instalar sudo, curl, bash y Node.js (y todas las dependencias necesarias)
-USER root
+USER joseto
 
 RUN apt-get update && \
     apt-get install -y sudo curl bash && \
@@ -27,6 +27,7 @@ FROM eclipse-temurin:11-jre-jammy
 COPY --from=build /home/app/target/spring-boot-2-hello-world-${VERSION}.jar /usr/local/lib/app.jar
 
 ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
+
 
 
 
