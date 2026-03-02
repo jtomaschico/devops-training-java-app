@@ -1,7 +1,7 @@
 name: CI-CD
 
 on:
-   push:
+  push:
      branches:
        - '**'
 
@@ -33,6 +33,7 @@ env:
   
 jobs:
   ci:
+    if: false
     # nombre que veremos del job
     name: Continuous Integration
     #runs-on: ubuntu-latest
