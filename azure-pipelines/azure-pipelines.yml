@@ -17,16 +17,43 @@ variables:
   #- name: APP_URL
     #value: http://localhost:8084/hello
 
+parameters:
+  - name: RUN_CD
+    type: boolean
+    default: false
+    displayName: "Run Continuous Deployment"
+
+  - name: DEPLOY_ENV
+    type: string
+    default: DEV
+    displayName: "Deployment Environment"    
+
 pool:
-  #vmImage: ubuntu-latest
   name: Default
 
-steps:
-  - script: |
-      echo "Repo:   $(Build.Repository.Name)"
-      echo "Branch: $(Build.SourceBranchName)"
-      echo "SHA:    $(Build.SourceVersion)"
-      echo "Reason: $(Build.Reason)"
-      echo "IMAGE: $(IMAGE_NAME)"
-      echo "URL:   $(APP_URL)"
-    displayName: "Info devops-training-java-app"
+jobs:
+  - job: CI
+    displayName: "Continuous Integration"
+    steps:
+      - script: |
+          echo "Repo:   $(Build.Repository.Name)"
+          echo "Branch: $(Build.SourceBranchName)"
+          echo "SHA:    $(Build.SourceVersion)"
+          echo "Reason: $(Build.Reason)"
+          echo "IMAGE: $(IMAGE_NAME)"
+          echo "URL:   $(APP_URL)"
+        displayName: "Info devops-training-java-app"
+        
+      - script: |
+          echo "Ejecutando pasos de CI..."
+        displayName: "CI Steps"
+
+  - job: CD
+    displayName: "Continuous Deployment"
+    dependsOn: CI
+    condition: eq('${{ parameters.RUN_CD }}', true)
+    steps:
+      - script: |
+          echo "🚀 Desplegando aplicación..."
+          echo "Entorno de despliegue: ${{ parameters.DEPLOY_ENV }}"
+        displayName: "CD Steps"
