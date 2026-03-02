@@ -10,6 +10,13 @@ pr:
       - develop
       - main
 
+variables:
+  - group: josetoCredentials
+  #- name: IMAGE_NAME
+    #value: scalian_training-java-app
+  #- name: APP_URL
+    #value: http://localhost:8084/hello
+
 pool:
   #vmImage: ubuntu-latest
   name: Default
@@ -20,4 +27,6 @@ steps:
       echo "Branch: $(Build.SourceBranchName)"
       echo "SHA:    $(Build.SourceVersion)"
       echo "Reason: $(Build.Reason)"
+      echo "IMAGE: $(IMAGE_NAME)"
+      echo "URL:   $(APP_URL)"
     displayName: "Info devops-training-java-app"
