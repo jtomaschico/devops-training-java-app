@@ -9,4 +9,4 @@ steps:
       echo "Repo:   $(Build.Repository.Name)"
       echo "Branch: $(Build.SourceBranchName)"
       echo "SHA:    $(Build.SourceVersion)"
-      displayName: "Info (dummy)"
+    displayName: "Info (dummy)"
