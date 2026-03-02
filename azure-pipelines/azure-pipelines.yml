@@ -1,0 +1,12 @@
+trigger: none
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - script: |
+      echo "Repo:   $(Build.Repository.Name)"
+      echo "Branch: $(Build.SourceBranchName)"
+      echo "SHA:    $(Build.SourceVersion)"
+    displayName: "Info (dummy)"
