@@ -1,5 +1,14 @@
-trigger: none
-pr: none
+trigger:
+  branches:
+    include:
+      - develop
+      - main
+
+pr:
+  branches:
+    include:
+      - develop
+      - main
 
 pool:
   vmImage: ubuntu-latest
@@ -9,4 +18,5 @@ steps:
       echo "Repo:   $(Build.Repository.Name)"
       echo "Branch: $(Build.SourceBranchName)"
       echo "SHA:    $(Build.SourceVersion)"
+      echo "Reason: $(Build.Reason)"
     displayName: "Info (dummy)"
