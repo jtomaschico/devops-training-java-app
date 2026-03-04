@@ -39,7 +39,6 @@ stages:
   - stage: CI
     displayName: "Continuous Integration"
     jobs:
-      # Job de info
       - job: Info
         displayName: "Info devops-training-java-app"
         steps:
@@ -52,26 +51,19 @@ stages:
               echo "URL:   $(APP_URL)"
             displayName: "Show Info"
 
-      # Job CI en contenedor Java
       - job: CI_Java
         displayName: "CI Java (container)"
-        container: maven:3.8.6-openjdk-11-slim
+        container: maven:3.8.6-openjdk-11
         steps:
-          - script: |
-              apt-get update && apt-get install -y sudo
-              sudo apt-get install -y make
-            displayName: "Install make"
           - script: |
               make lint
               make test
             displayName: "Lint & Test Java"
 
-      # Job usando template existente
       - job: CI_Template
         displayName: "CI Java (template)"
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
-          
 
   - stage: CD
     displayName: "Continuous Deployment"
