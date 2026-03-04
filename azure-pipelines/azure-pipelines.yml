@@ -17,7 +17,7 @@ resources:
       type: github
       name: jtomaschico/devops-training-iac-devops
       ref: refs/heads/feat/base
-      endpoint: service-connection-github      
+      endpoint: jtomaschico   
 
 variables:
   # Library -> Variable groups (reutilización entre pipelines).
