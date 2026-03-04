@@ -10,7 +10,17 @@ pr:
       - develop
       - main
 
+# Importa el repo IaC
+resources:
+  repositories:
+    - repository: iac
+      type: github
+      name: jtomaschico/devops-training-iac-devops
+      ref: refs/heads/feat/base
+      endpoint: service-connection-github      
+
 variables:
+  # Library -> Variable groups (reutilización entre pipelines).
   - group: josetoCredentials
   #- name: IMAGE_NAME
     #value: scalian_training-java-app
@@ -47,6 +57,9 @@ jobs:
       - script: |
           echo "Ejecutando pasos de CI..."
         displayName: "CI Steps"
+
+      # Usa el template reutilizable
+      - template: azure-pipelines/templates/ci-java-steps.yml@iac  
 
   - job: CD
     displayName: "Continuous Deployment"
