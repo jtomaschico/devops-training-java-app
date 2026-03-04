@@ -51,15 +51,6 @@ stages:
               echo "URL:   $(APP_URL)"
             displayName: "Show Info"
 
-      - job: CI_Java
-        displayName: "CI Java (container)"
-        container: maven:3.8.6-openjdk-11
-        steps:
-          - script: |
-              make lint
-              make test
-            displayName: "Lint & Test Java"
-
       - job: CI_Template
         displayName: "CI Java (template)"
         steps:
