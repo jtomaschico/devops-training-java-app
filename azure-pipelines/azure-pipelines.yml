@@ -10,7 +10,6 @@ pr:
       - develop
       - main
 
-# Importa el repo IaC
 resources:
   repositories:
     - repository: iac
@@ -20,12 +19,7 @@ resources:
       endpoint: jtomaschico
 
 variables:
-  # Library -> Variable groups (reutilización entre pipelines).
   - group: josetoCredentials
-  #- name: IMAGE_NAME
-    #value: scalian_training-java-app
-  #- name: APP_URL
-    #value: http://localhost:8084/hello
 
 parameters:
   - name: RUN_CD
@@ -39,12 +33,13 @@ parameters:
     displayName: "Deployment Environment"
 
 pool:
-  name: Default
+  name: Default   # Self-hosted agent
 
 stages:
   - stage: CI
     displayName: "Continuous Integration"
     jobs:
+      # Job de info
       - job: Info
         displayName: "Info devops-training-java-app"
         steps:
@@ -57,11 +52,20 @@ stages:
               echo "URL:   $(APP_URL)"
             displayName: "Show Info"
 
+      # Job CI en contenedor Python
+      - job: CI_Python
+        displayName: "CI Python (container)"
+        container: python:3.6-slim
+        steps:
+          - script: |
+              python --version
+              pip install -r requirements.txt
+              pytest
+            displayName: "Run Python tests"
+
       # Job CI en contenedor Java
       - job: CI_Java
         displayName: "CI Java (container)"
-        pool:
-          vmImage: ubuntu-latest
         container: maven:3.8.6-openjdk-11-slim
         steps:
           - script: |
