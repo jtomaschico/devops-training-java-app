@@ -58,6 +58,10 @@ stages:
         container: maven:3.8.6-openjdk-11-slim
         steps:
           - script: |
+              apt-get update
+              apt-get install -y make
+            displayName: "Install make"
+          - script: |
               make lint
               make test
             displayName: "Lint & Test Java"
@@ -67,6 +71,7 @@ stages:
         displayName: "CI Java (template)"
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
+          displayName: "Template ci-java-steps"
 
   - stage: CD
     displayName: "Continuous Deployment"
