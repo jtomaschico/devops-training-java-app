@@ -17,7 +17,7 @@ resources:
       type: github
       name: jtomaschico/devops-training-iac-devops
       ref: refs/heads/feat/base
-      endpoint: jtomaschico   
+      endpoint: jtomaschico
 
 variables:
   # Library -> Variable groups (reutilización entre pipelines).
@@ -36,37 +36,41 @@ parameters:
   - name: DEPLOY_ENV
     type: string
     default: DEV
-    displayName: "Deployment Environment"    
+    displayName: "Deployment Environment"
 
 pool:
   name: Default
 
-jobs:
-  - job: CI
+stages:
+  - stage: CI
     displayName: "Continuous Integration"
-    steps:
-      - script: |
-          echo "Repo:   $(Build.Repository.Name)"
-          echo "Branch: $(Build.SourceBranchName)"
-          echo "SHA:    $(Build.SourceVersion)"
-          echo "Reason: $(Build.Reason)"
-          echo "IMAGE: $(IMAGE_NAME)"
-          echo "URL:   $(APP_URL)"
+    jobs:
+      - job: Info
         displayName: "Info devops-training-java-app"
-        
-      - script: |
-          echo "Ejecutando pasos de CI..."
-        displayName: "CI Steps"
+        steps:
+          - script: |
+              echo "Repo:   $(Build.Repository.Name)"
+              echo "Branch: $(Build.SourceBranchName)"
+              echo "SHA:    $(Build.SourceVersion)"
+              echo "Reason: $(Build.Reason)"
+              echo "IMAGE: $(IMAGE_NAME)"
+              echo "URL:   $(APP_URL)"
+            displayName: "Show Info"
 
-      # Usa el template reutilizable
-      - template: azure-pipelines/templates/ci-java-steps.yml@iac  
+      - job: CI_Java
+        displayName: "CI Java"
+        steps:
+          - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-  - job: CD
+  - stage: CD
     displayName: "Continuous Deployment"
     dependsOn: CI
     condition: eq('${{ parameters.RUN_CD }}', true)
-    steps:
-      - script: |
-          echo "🚀 Desplegando aplicación..."
-          echo "Entorno de despliegue: ${{ parameters.DEPLOY_ENV }}"
-        displayName: "CD Steps"
+    jobs:
+      - job: CD
+        displayName: "Continuous Deployment"
+        steps:
+          - script: |
+              echo "🚀 Desplegando aplicación..."
+              echo "Entorno de despliegue: ${{ parameters.DEPLOY_ENV }}"
+            displayName: "CD Steps"
