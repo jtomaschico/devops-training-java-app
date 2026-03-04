@@ -56,11 +56,10 @@ stages:
       - job: CI_Java
         displayName: "CI Java (container)"
         container: maven:3.8.6-openjdk-11-slim
-        options: --user root
         steps:
           - script: |
-              apt-get update
-              apt-get install -y make
+              apt-get update && apt-get install -y sudo
+              sudo apt-get install -y make
             displayName: "Install make"
           - script: |
               make lint
