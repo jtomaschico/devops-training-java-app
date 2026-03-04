@@ -71,7 +71,7 @@ stages:
         displayName: "CI Java (template)"
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
-          displayName: "Template ci-java-steps"
+          
 
   - stage: CD
     displayName: "Continuous Deployment"
