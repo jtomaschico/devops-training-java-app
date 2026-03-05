@@ -5,7 +5,7 @@ FROM maven:3.8.6-openjdk-11-slim as build
 USER joseto
 
 RUN apt-get update && \
-    apt-get install -y sudo curl bash && \
+    apt-get install -y sudo curl bash make && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     node -v && npm -v  # Verificar que Node.js y npm estén instalados
@@ -27,6 +27,7 @@ FROM eclipse-temurin:11-jre-jammy
 COPY --from=build /home/app/target/spring-boot-2-hello-world-${VERSION}.jar /usr/local/lib/app.jar
 
 ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
+
 
 
 
