@@ -67,8 +67,7 @@ stages:
               docker run --rm \
                 -v "$(Build.SourcesDirectory)":/workspace \
                 -w /workspace \
-                --user joseto \ 
-                maven:3.8.6-openjdk-11-slim \  # Imagen Docker sin comillas innecesarias
+                maven:3.8.6-openjdk-11-slim \
                 bash -c "
                   apt-get update && \
                   apt-get install -y sudo curl bash make && \
