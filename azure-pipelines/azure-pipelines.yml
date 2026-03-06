@@ -53,17 +53,7 @@ stages:
       - job: CI_Template
         displayName: "CI Java (template)"
         steps:
-          - template: azure-pipelines/templates/ci-java-steps.yml@iac
-
-      - job: build_image
-        displayName: "Build image"
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-          - checkout: self
-          - script: |
-              docker build -t $(IMAGE_NAME) --build-arg VERSION=$(Build.BuildId) -f devops/Dockerfile .
-            displayName: "Docker build"    
+          - template: azure-pipelines/templates/ci-java-steps.yml@iac 
 
   - stage: CD
     displayName: "Continuous Deployment"
