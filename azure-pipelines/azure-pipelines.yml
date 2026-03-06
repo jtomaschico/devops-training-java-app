@@ -55,11 +55,9 @@ stages:
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac 
 
-      # Paso para construir la imagen Docker
+      # Paso para construir la imagen
       - job: Build_Docker_Image
         displayName: "Build Docker Image"
-        pool:
-          vmImage: 'ubuntu-latest'  # O usa tu propio agente si es necesario
         steps:
           - script: |
               docker run --rm \
@@ -68,7 +66,7 @@ stages:
                 maven:3.8.6-openjdk-11-slim \
                 bash -c "
                   docker build -t $(IMAGE_NAME) --build-arg VERSION=$(Build.BuildId) -f devops/Dockerfile ."
-            displayName: "Docker build"    
+            displayName: "Docker Build"   
 
 
   - stage: CD
