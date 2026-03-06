@@ -19,6 +19,10 @@ resources:
 
 variables:
   - group: josetoCredentials
+  - name: IMAGE_NAME
+    value: "myapp"  # Asegúrate de definir un nombre adecuado para la imagen Docker
+  - name: APP_URL
+    value: "your-app-url"  # Define tu URL de aplicación o cualquier otra variable relevante
 
 parameters:
   - name: RUN_CD
@@ -53,24 +57,23 @@ stages:
       - job: CI_Template
         displayName: "CI Java (template)"
         steps:
-          - template: azure-pipelines/templates/ci-java-steps.yml@iac 
+          - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-      # Paso para construir la imagen
+      # Paso para construir la imagen Docker usando maven:3.8.6-openjdk-11-slim
       - job: Build_Docker_Image
         displayName: "Build Docker Image"
         steps:
           - script: |
               docker run --rm \
                 -v "$(Build.SourcesDirectory)":/workspace \
-                -v /var/run/docker.sock:/var/run/docker.sock \  # Montar el socket de Docker
+                -v /var/run/docker.sock:/var/run/docker.sock \
                 -w /workspace \
                 maven:3.8.6-openjdk-11-slim \
                 bash -c "
-                  apt-get update && apt-get install -y docker.io && \  # Instalar Docker en el contenedor
+                  apt-get update && apt-get install -y docker.io && \
                   docker build -t $(IMAGE_NAME) --build-arg VERSION=$(Build.BuildId) -f devops/Dockerfile ."
-            displayName: "Docker Build"   
-
-
+            displayName: "Docker Build"
+          
   - stage: CD
     displayName: "Continuous Deployment"
     dependsOn: CI
