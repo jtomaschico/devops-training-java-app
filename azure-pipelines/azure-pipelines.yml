@@ -65,6 +65,7 @@ stages:
                 -w /workspace \
                 maven:3.8.6-openjdk-11-slim \
                 bash -c "
+                  apt-get update && apt-get install -y docker.io && \  # Instalar Docker en el contenedor
                   docker build -t $(IMAGE_NAME) --build-arg VERSION=$(Build.BuildId) -f devops/Dockerfile ."
             displayName: "Docker Build"   
 
