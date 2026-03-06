@@ -68,6 +68,7 @@ stages:
                 -v "$(Build.SourcesDirectory)":/workspace \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 -w /workspace \
+                --user root \  # Ejecutar como usuario root
                 maven:3.8.6-openjdk-11-slim \
                 bash -c "
                   apt-get update && apt-get install -y docker.io && \
