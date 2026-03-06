@@ -57,14 +57,13 @@ stages:
 
       - job: build_image
         displayName: "Build image"
-        dependsOn: test
         pool:
           vmImage: ubuntu-latest
         steps:
           - checkout: self
           - script: |
-              docker build -t $(IMAGE_NAME) --build-arg VERSION=... -f devops/Dockerfile ."
-            displayName: "Docker build (TODO)"    
+              docker build -t $(IMAGE_NAME) --build-arg VERSION=$(Build.BuildId) -f devops/Dockerfile .
+            displayName: "Docker build"    
 
   - stage: CD
     displayName: "Continuous Deployment"
