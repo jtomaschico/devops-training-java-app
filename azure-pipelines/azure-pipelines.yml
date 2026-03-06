@@ -75,6 +75,7 @@ stages:
                   apt-get install -y nodejs && \
                   node -v && npm -v"
             displayName: "Docker Build"
+
           
   - stage: CD
     displayName: "Continuous Deployment"
