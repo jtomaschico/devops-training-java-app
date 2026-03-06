@@ -55,6 +55,17 @@ stages:
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
+      - job: build_image
+        displayName: "Build image"
+        dependsOn: test
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - script: |
+              docker build -t $(IMAGE_NAME) --build-arg VERSION=... -f devops/Dockerfile ."
+            displayName: "Docker build (TODO)"    
+
   - stage: CD
     displayName: "Continuous Deployment"
     dependsOn: CI
