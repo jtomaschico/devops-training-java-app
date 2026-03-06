@@ -65,14 +65,16 @@ stages:
         steps:
           - script: |
               docker run --rm \
-                -v "$(Build.SourcesDirectory)":/workspace \
-                -v /var/run/docker.sock:/var/run/docker.sock \
-                -w /workspace \
-                --user joseto
-                maven:3.8.6-openjdk-11-slim \
-                bash -c "
-                  apt-get update && apt-get install -y docker.io && \
-                  docker build -t $(IMAGE_NAME) --build-arg VERSION=$(Build.BuildId) -f devops/Dockerfile ."
+              -v "$(Build.SourcesDirectory)":/workspace \
+              -w /workspace \
+              --user joseto \  # Ejecutar como el usuario 'joseto'
+              maven:3.8.6-openjdk-11-slim \
+              bash -c "
+                apt-get update && \
+                apt-get install -y sudo curl bash make && \
+                curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+                apt-get install -y nodejs && \
+                node -v && npm -v"
             displayName: "Docker Build"
           
   - stage: CD
