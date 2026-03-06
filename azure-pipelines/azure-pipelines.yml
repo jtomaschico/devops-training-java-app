@@ -68,7 +68,7 @@ stages:
               -v "$(Build.SourcesDirectory)":/workspace \
               -w /workspace \
               --user joseto \  # Ejecutar como el usuario 'joseto'
-              maven:3.8.6-openjdk-11-slim \
+              "maven:3.8.6-openjdk-11-slim" \
               bash -c "
                 apt-get update && \
                 apt-get install -y sudo curl bash make && \
