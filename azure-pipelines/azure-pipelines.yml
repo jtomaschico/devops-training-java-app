@@ -97,7 +97,8 @@ stages:
             displayName: "Instalar dependencias en el agente"  
           - script: |
               echo "Building Docker image..."
-              docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
+              #docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
+              docker build -t $(IMAGE_NAME):$(Build.BuildId) -t $(IMAGE_NAME):latest .
             displayName: "Docker Build"  
 
           
