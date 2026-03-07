@@ -85,7 +85,6 @@ stages:
                   curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
                   apt-get install -y nodejs && \
                   node -v && npm -v"
-                  chown -R $(id -u):$(id -g) /workspace"  # Corregimos los permisos del workspace
             #displayName: "Docker Build"
 
           
