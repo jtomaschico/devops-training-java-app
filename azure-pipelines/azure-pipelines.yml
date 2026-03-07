@@ -59,45 +59,22 @@ stages:
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-      #- job: build_image
-       # displayName: "Build image"
-        #dependsOn: CI_Template
-        #steps:
-         # - checkout: self
-          #- script: |
-           #   docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
-            #displayName: "Docker build"   
-
       # Paso para construir la imagen Docker usando maven:3.8.6-openjdk-11-slim
       - job: Build_Docker_Image
         displayName: "Build Docker Image"
         dependsOn: CI_Template
         steps:
           - checkout: self
+          
           #- script: |
-           #   echo "Build with Maven container..."
-            #  docker run --rm \
-             #   -v "$(Build.SourcesDirectory)":/workspace \
-              #  -w /workspace \
-               # --user root \
-                #maven:3.8.6-openjdk-11-slim \
-                #bash -c "
-                 # apt-get update && \
-                #apt-get install -y sudo curl bash make && \
-                  #curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-                  #apt-get install -y nodejs && \
-                  #node -v && npm -v"
-            #displayName: "Build with Maven container"
-          - script: |
-              echo "Instalando Node.js y dependencias..."
-              sudo apt-get update
-              sudo apt-get install -y curl bash make nodejs npm
-              node -v
-              npm -v
-            displayName: "Instalar dependencias en el agente"  
+           #   echo "Instalando Node.js y dependencias..."
+            #  sudo apt-get update
+             # sudo apt-get install -y curl bash make nodejs npm
+              #node -v
+              #npm -v
+            #displayName: "Instalar dependencias en el agente"  
           - script: |
               echo "Building Docker image..."
-              #docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
               docker build -t $(IMAGE_NAME):$(Build.BuildId) -t $(IMAGE_NAME):latest .
             displayName: "Docker Build"  
 
