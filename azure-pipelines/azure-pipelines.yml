@@ -57,17 +57,7 @@ stages:
       - job: CI_Template
         displayName: "CI Java (template)"
         steps:
-          - template: azure-pipelines/templates/ci-java-steps.yml@iac
-
-      # Job para Build Docker Image
-      - job: Build_Docker_Image
-        displayName: "Build Docker Image"
-        steps:
-          - script: |
-              docker build -t $(IMAGE_NAME) \
-                --build-arg VERSION=$(Build.BuildId) \
-                -f devops/Dockerfile .
-            displayName: "Build Docker Image"     
+          - template: azure-pipelines/templates/ci-java-steps.yml@iac  
 
       # Build
       #- job: Build_Docker_Image
@@ -86,16 +76,26 @@ stages:
                   #node -v && npm -v"
             #displayName: "Build Docker Image"
 
-          
   - stage: CD
     displayName: "Continuous Deployment"
     dependsOn: CI
-    condition: eq('${{ parameters.RUN_CD }}', true)
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranchName'], 'main')), eq(variables['Build.Reason'], 'Manual'))
     jobs:
-      - job: CD
-        displayName: "Continuous Deployment"
+      - job: Deploy
+        displayName: "Deploy Application"
+        pool:
+          vmImage: 'ubuntu-latest'
         steps:
+          - task: Checkout@2
+            displayName: 'Checkout Repository'
+            inputs:
+              clean: true
+              
           - script: |
-              echo "🚀 Desplegando aplicación..."
-              echo "Entorno de despliegue: ${{ parameters.DEPLOY_ENV }}"
-            displayName: "CD Steps"
+              echo "🚀 Ejecutando CD..."
+            displayName: "Deploy"
+          
+          - script: |
+              echo "Building Docker image..."
+              docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
+            displayName: "Build Docker Image"
