@@ -62,8 +62,6 @@ stages:
       - job: build_image
         displayName: "Build image"
         dependsOn: CI_Template
-        pool:
-          vmImage: maven:3.8.6-openjdk-11-slim
         steps:
           - checkout: self
           - script: |
