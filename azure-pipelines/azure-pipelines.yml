@@ -78,7 +78,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: Checkout@2  # Usando la versión correcta de la tarea Checkout
+          - task: checkout@2  # Aquí usamos minúsculas para "checkout"
             displayName: 'Checkout Repository'
             inputs:
               clean: true
