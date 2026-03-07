@@ -75,6 +75,7 @@ stages:
         steps:
           - checkout: self
           - script: |
+              echo "Build with Maven container..."
               docker run --rm \
                 -v "$(Build.SourcesDirectory)":/workspace \
                 -w /workspace \
@@ -85,7 +86,11 @@ stages:
                   curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
                   apt-get install -y nodejs && \
                   node -v && npm -v"
-            #displayName: "Docker Build"
+            #displayName: "Build with Maven container"
+          - script: |
+              echo "Building Docker image..."
+              docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
+            displayName: "Docker Build"  
 
           
   - stage: CD
