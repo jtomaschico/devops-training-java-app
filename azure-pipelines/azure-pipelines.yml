@@ -1,3 +1,29 @@
+resources:
+  repositories:
+    - repository: iac
+      type: github
+      name: jtomaschico/devops-training-iac-devops  # El nombre del repositorio de GitHub
+      ref: refs/heads/feat/base  # La rama de GitHub a la que estás haciendo referencia
+      endpoint: jtomaschico  # El nombre de la conexión de servicio de GitHub en Azure DevOps
+
+variables:
+  - group: josetoCredentials
+  - name: IMAGE_NAME
+    value: "myapp"
+  - name: APP_URL
+    value: "your-app-url"
+
+parameters:
+  - name: RUN_CD
+    type: boolean
+    default: false
+    displayName: "Run Continuous Deployment"
+
+  - name: DEPLOY_ENV
+    type: string
+    default: DEV
+    displayName: "Deployment Environment"
+
 stages:
   - stage: CI
     displayName: "Continuous Integration"
@@ -19,16 +45,16 @@ stages:
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-      # Job para Build Docker Image
+      # Build Docker Image (comentado si no lo necesitas)
       #- job: Build_Docker_Image
-       # displayName: "Build Docker Image"
-        #steps:
-         # - script: |
-          #    docker build -t $(IMAGE_NAME) \
-           #     --build-arg VERSION=$(Build.BuildId) \
-            #    -f devops/Dockerfile .
-            #displayName: "Build Docker Image"
-          
+      #  displayName: "Build Docker Image"
+      #  steps:
+      #    - script: |
+      #        docker build -t $(IMAGE_NAME) \
+      #          --build-arg VERSION=$(Build.BuildId) \
+      #          -f devops/Dockerfile .
+      #      displayName: "Build Docker Image"
+
   - stage: CD
     displayName: "Continuous Deployment"
     dependsOn: CI
