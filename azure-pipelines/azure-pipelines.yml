@@ -65,9 +65,8 @@ stages:
         steps:
           - checkout: self
           - script: |
-              #docker build -t $(IMAGE_NAME) --build-arg VERSION=... -f devops/Dockerfile ."
               docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
-            displayName: "Docker build (TODO)"   
+            displayName: "Docker build"   
 
       # Paso para construir la imagen Docker usando maven:3.8.6-openjdk-11-slim
       #- job: Build_Docker_Image
