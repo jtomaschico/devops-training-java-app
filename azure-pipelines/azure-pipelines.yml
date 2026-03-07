@@ -74,19 +74,27 @@ stages:
         dependsOn: CI_Template
         steps:
           - checkout: self
-          - script: |
-              echo "Build with Maven container..."
-              docker run --rm \
-                -v "$(Build.SourcesDirectory)":/workspace \
-                -w /workspace \
-                maven:3.8.6-openjdk-11-slim \
-                bash -c "
-                  apt-get update && \
-                  apt-get install -y sudo curl bash make && \
-                  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-                  apt-get install -y nodejs && \
-                  node -v && npm -v"
+          #- script: |
+           #   echo "Build with Maven container..."
+            #  docker run --rm \
+             #   -v "$(Build.SourcesDirectory)":/workspace \
+              #  -w /workspace \
+               3 --user root \
+                #maven:3.8.6-openjdk-11-slim \
+                #bash -c "
+                 # apt-get update && \
+                #apt-get install -y sudo curl bash make && \
+                  #curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+                  #apt-get install -y nodejs && \
+                  #node -v && npm -v"
             #displayName: "Build with Maven container"
+          - script: |
+              echo "Instalando Node.js y dependencias..."
+              sudo apt-get update
+              sudo apt-get install -y curl bash make nodejs npm
+              node -v
+              npm -v
+            displayName: "Instalar dependencias en el agente"  
           - script: |
               echo "Building Docker image..."
               docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
