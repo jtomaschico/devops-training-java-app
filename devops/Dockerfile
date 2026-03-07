@@ -1,35 +1,47 @@
-FROM maven:3.8.6-openjdk-11-slim as build
+# Usamos una imagen base de Maven con OpenJDK
+FROM maven:3.8.6-openjdk-11-slim AS build
 
-# Crear usuario joseto
-RUN useradd -ms /bin/bash joseto
+# Definir el argumento de versión (usado para pasar el valor de VERSION en el build)
+ARG VERSION
 
-# Ejecutar las instalaciones y configuraciones como root
+# Instalar dependencias básicas (como sudo, curl, bash, make, Node.js)
 RUN apt-get update && \
     apt-get install -y sudo curl bash make && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs npm && \
+    apt-get install -y nodejs && \
     node -v && npm -v
 
-# Cambiar al usuario joseto
-USER joseto
+# Copiar solo el archivo `pom.xml` para aprovechar el cache de Maven
+COPY pom.xml /home/app/pom.xml
 
-# Copiar el código y el archivo de configuración
-COPY ./src /home/app/src
-COPY ./pom.xml /home/app
-
+# Establecer el directorio de trabajo
 WORKDIR /home/app
 
-# Compilación con Maven
-RUN mvn versions:set -DnewVersion=${VERSION}
-RUN mvn install
+# Descargar las dependencias de Maven (esto se puede cachear)
+RUN mvn dependency:go-offline
 
-# Package stage
+# Copiar todo el código fuente
+COPY ./src /home/app/src
+
+# Compilación del proyecto
+RUN mvn versions:set -DnewVersion=${VERSION} && \
+    mvn install
+
+# Stage de "Package" donde empaquetamos la aplicación con OpenJDK
 FROM eclipse-temurin:11-jre-jammy
 
-# Copiar el archivo JAR desde la etapa de build
+# Crear el usuario joseto (en caso de que se necesite para ejecutar la aplicación)
+RUN useradd -ms /bin/bash joseto
+
+# Establecer usuario
+USER joseto
+
+# Copiar el archivo JAR desde el contenedor anterior (con Maven)
 COPY --from=build /home/app/target/spring-boot-2-hello-world-${VERSION}.jar /usr/local/lib/app.jar
 
-ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
+# Definir el punto de entrada para ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/app.jar"]
+
 
 
 
