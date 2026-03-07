@@ -78,7 +78,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: Checkout@v2  # Aquí corregimos la versión
+          - task: Checkout@2  # Usando la versión correcta de la tarea Checkout
             displayName: 'Checkout Repository'
             inputs:
               clean: true
