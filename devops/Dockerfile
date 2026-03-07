@@ -36,11 +36,14 @@ RUN useradd -ms /bin/bash joseto
 # Establecer usuario
 USER joseto
 
+
 # Copiar el archivo JAR desde el contenedor anterior (con Maven)
-COPY --from=build /home/app/target/spring-boot-2-hello-world-${VERSION}.jar /usr/local/lib/app.jar
+COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
+#COPY --from=build /home/app/target/spring-boot-2-hello-world-${VERSION}.jar /usr/local/lib/app.jar
 
 # Definir el punto de entrada para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "/usr/local/lib/app.jar"]
+
 
 
 
