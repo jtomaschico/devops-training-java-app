@@ -59,7 +59,7 @@ stages:
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-       - job: build_image
+      - job: build_image
         displayName: "Build image"
         dependsOn: test
         pool:
