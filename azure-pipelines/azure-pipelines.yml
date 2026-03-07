@@ -1,44 +1,3 @@
-trigger:
-  branches:
-    include:
-      - develop
-      - main
-
-pr:
-  branches:
-    include:
-      - develop
-      - main
-
-resources:
-  repositories:
-    - repository: iac
-      type: github
-      name: jtomaschico/devops-training-iac-devops
-      ref: refs/heads/feat/base
-      endpoint: jtomaschico
-
-variables:
-  - group: josetoCredentials
-  - name: IMAGE_NAME
-    value: "myapp"  # Asegúrate de definir un nombre adecuado para la imagen Docker
-  - name: APP_URL
-    value: "your-app-url"  # Define tu URL de aplicación o cualquier otra variable relevante
-
-parameters:
-  - name: RUN_CD
-    type: boolean
-    default: false
-    displayName: "Run Continuous Deployment"
-
-  - name: DEPLOY_ENV
-    type: string
-    default: DEV
-    displayName: "Deployment Environment"
-
-pool:
-  name: Default   # Self-hosted agent
-
 stages:
   - stage: CI
     displayName: "Continuous Integration"
@@ -58,36 +17,27 @@ stages:
       - job: CI_Template
         displayName: "CI Java (template)"
         steps:
-          - template: azure-pipelines/templates/ci-java-steps.yml@iac  
+          - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-      # Build Docker Image
+      # Job para Build Docker Image
       - job: Build_Docker_Image
         displayName: "Build Docker Image"
         steps:
           - script: |
-              docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
+              docker build -t $(IMAGE_NAME) \
+                --build-arg VERSION=$(Build.BuildId) \
+                -f devops/Dockerfile .
             displayName: "Build Docker Image"
-
+          
   - stage: CD
     displayName: "Continuous Deployment"
     dependsOn: CI
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranchName'], 'main')), eq(variables['Build.Reason'], 'Manual'))
+    condition: eq('${{ parameters.RUN_CD }}', true)
     jobs:
-      - job: Deploy
-        displayName: "Deploy Application"
-        pool:
-          vmImage: 'ubuntu-latest'
+      - job: CD
+        displayName: "Continuous Deployment"
         steps:
-          - task: checkout@2  # Aquí usamos minúsculas para "checkout"
-            displayName: 'Checkout Repository'
-            inputs:
-              clean: true
-              
           - script: |
-              echo "🚀 Ejecutando CD..."
-            displayName: "Deploy"
-          
-          - script: |
-              echo "Building Docker image..."
-              docker build -t $(IMAGE_NAME):latest -f devops/Dockerfile .
-            displayName: "Build Docker Image"
+              echo "🚀 Desplegando aplicación..."
+              echo "Entorno de despliegue: ${{ parameters.DEPLOY_ENV }}"
+            displayName: "CD Steps"
