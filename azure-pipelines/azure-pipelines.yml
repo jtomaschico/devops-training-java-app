@@ -61,7 +61,6 @@ stages:
 
       - job: build_image
         displayName: "Build image"
-        dependsOn: test
         pool:
           vmImage: ubuntu-latest
         steps:
