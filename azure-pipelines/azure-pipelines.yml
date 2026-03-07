@@ -59,30 +59,33 @@ stages:
         steps:
           - template: azure-pipelines/templates/ci-java-steps.yml@iac
 
-      - job: build_image
-        displayName: "Build image"
+      #- job: build_image
+       # displayName: "Build image"
+        #dependsOn: CI_Template
+        #steps:
+         # - checkout: self
+          #- script: |
+           #   docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
+            #displayName: "Docker build"   
+
+      # Paso para construir la imagen Docker usando maven:3.8.6-openjdk-11-slim
+      - job: Build_Docker_Image
+        displayName: "Build Docker Image"
         dependsOn: CI_Template
         steps:
           - checkout: self
           - script: |
-              docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
-            displayName: "Docker build"   
-
-      # Paso para construir la imagen Docker usando maven:3.8.6-openjdk-11-slim
-      #- job: Build_Docker_Image
-      #  displayName: "Build Docker Image"
-      #  steps:
-      #    - script: |
-       #       docker run --rm \
-        #        -v "$(Build.SourcesDirectory)":/workspace \
-         #       -w /workspace \
-          #      maven:3.8.6-openjdk-11-slim \
-           #     bash -c "
-            #      apt-get update && \
-             #     apt-get install -y sudo curl bash make && \
-              #    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-               #   apt-get install -y nodejs && \
-                #  node -v && npm -v"
+              docker run --rm \
+                -v "$(Build.SourcesDirectory)":/workspace \
+                -w /workspace \
+                maven:3.8.6-openjdk-11-slim \
+                bash -c "
+                  apt-get update && \
+                  apt-get install -y sudo curl bash make && \
+                  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+                  apt-get install -y nodejs && \
+                  node -v && npm -v"
+                  chown -R $(id -u):$(id -g) /workspace"  # Corregimos los permisos del workspace
             #displayName: "Docker Build"
 
           
