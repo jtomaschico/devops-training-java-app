@@ -65,8 +65,8 @@ stages:
         steps:
           - checkout: self
           - script: |
-              echo "TODO (E6): docker build -t $(IMAGE_NAME) --build-arg VERSION=... -f devops/Dockerfile ."
-              docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
+              docker build -t $(IMAGE_NAME) --build-arg VERSION=... -f devops/Dockerfile ."
+              #docker build -t $IMAGE_NAME:latest -f devops/Dockerfile .
             displayName: "Docker build (TODO)"   
 
       # Paso para construir la imagen Docker usando maven:3.8.6-openjdk-11-slim
