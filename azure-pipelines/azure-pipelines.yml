@@ -20,9 +20,9 @@ resources:
 variables:
   - group: josetoCredentials
   - name: IMAGE_NAME
-    value: "myapp"  # Asegúrate de definir un nombre adecuado para la imagen Docker
+    value: "scalian_training-java-app"
   - name: APP_URL
-    value: "your-app-url"  # Define tu URL de aplicación o cualquier otra variable relevante
+    value: "http://localhost:8084/hello"  # Define tu URL de aplicación o cualquier otra variable relevante
 
 parameters:
   - name: RUN_CD
@@ -92,13 +92,34 @@ stages:
         displayName: "Deploy (simulado) + E2E"   
         steps:
           - checkout: self
+          # Levantar servicios con docker-compose
           - script: |
-              echo "TODO (E8/E9): docker compose up -d java_app"
-              echo "TODO (E8/E9): curl -fsS $(APP_URL)"
-            displayName: "CD steps (TODO)"
+              docker compose up -d
+            displayName: 'Levantar servicios'
+    
+          # Esperar a que la app esté lista
           - script: |
-              echo "TODO (E8/E6.5): cleanup siempre"
-              echo "TODO: docker compose down --volumes || true"
-              echo "TODO: docker rmi $(IMAGE_NAME) || true"
-            displayName: "Cleanup (TODO)"
+              sleep 5
+            displayName: 'Esperar a que la app esté lista'
+    
+          # Test E2E con curl
+          - script: |
+              curl -fsS $(APP_URL)
+            displayName: 'Test E2E con curl'
+    
+          # Cleanup (siempre)
+          - script: |
+              docker compose down --volumes || true
+              docker rmi $(IMAGE_NAME) || true
+              echo "TODO: cleanup"
+            displayName: 'Cleanup'
+            # En Azure DevOps puedes usar condition para siempre:
             condition: always()
+    
+          # Build Docker image
+          - script: |
+              IMAGE_TAG=$(Build.SourceVersion)
+              FULL_IMAGE_NAME=youracr.azurecr.io/$(IMAGE_NAME):$IMAGE_TAG
+              echo "Building $FULL_IMAGE_NAME"
+              docker build -t $FULL_IMAGE_NAME -f devops/Dockerfile .
+            displayName: 'Build Docker image'
