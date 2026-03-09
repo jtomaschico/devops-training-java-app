@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 networks:
   java-project-net:
@@ -22,6 +22,18 @@ services:
     container_name: java_app
     ports:
       - 8084:8080
+  azp-agent:
+    image: mcr.microsoft.com/azure-pipelines/vsts-agent:latest  # Imagen del agente de Azure Pipelines
+    restart: unless-stopped
+    environment:
+      AZP_URL: "https://dev.azure.com/jtomas210"  # URL de tu organización de Azure DevOps
+      AZP_TOKEN: "${AZP_TOKEN}"  # Asegúrate de definir este token en tus variables de entorno o .env
+      AZP_POOL: "Default"  # El nombre de tu pool de agentes
+      AZP_AGENT_NAME: "UNED2"  # Nombre de tu agente
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Permite ejecutar Docker desde el agente
+    networks:
+      - devops_training_net  # Red externa donde están Artifactory, Docker registry, etc.    
 
   # sonarqube:
   #   image: sonarqube:9.9.0-community
@@ -53,4 +65,5 @@ services:
   #   networks:
   #     java-project-net:
   #       aliases: 
+
   #         - sonardb
