@@ -34,6 +34,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # Permite ejecutar Docker desde el agente
     networks:
       - java-project-net  # Red externa donde están Artifactory, Docker registry, etc.    
+          external: true 
 
   # sonarqube:
   #   image: sonarqube:9.9.0-community
@@ -67,4 +68,5 @@ services:
   #       aliases: 
 
   #         - sonardb
+
 
