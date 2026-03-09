@@ -89,9 +89,7 @@ stages:
     condition: eq('${{ parameters.RUN_CD }}', true)
     jobs:
       - job: deploy
-        displayName: "Deploy (simulado) + E2E"
-        pool:
-          vmImage: ubuntu-latest
+        displayName: "Deploy (simulado) + E2E"   
         steps:
           - checkout: self
           - script: |
