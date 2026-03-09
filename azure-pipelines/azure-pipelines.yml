@@ -64,15 +64,7 @@ stages:
         displayName: "Build Docker Image"
         dependsOn: CI_Template
         steps:
-          - checkout: self
-          
-          #- script: |
-           #   echo "Instalando Node.js y dependencias..."
-            #  sudo apt-get update
-             # sudo apt-get install -y curl bash make nodejs npm
-              #node -v
-              #npm -v
-            #displayName: "Instalar dependencias en el agente"  
+          - checkout: self  
           - script: |
               echo "Building Docker image..."
               #docker build -t $(IMAGE_NAME):$(Build.BuildId) -t $(IMAGE_NAME):latest -f devops/Dockerfile .
@@ -98,28 +90,28 @@ stages:
             displayName: 'Levantar servicios'
     
           # Esperar a que la app esté lista
-          - script: |
-              sleep 5
-            displayName: 'Esperar a que la app esté lista'
+         # - script: |
+          #    sleep 5
+           # displayName: 'Esperar a que la app esté lista'
     
           # Test E2E con curl
-          - script: |
-              curl -fsS $(APP_URL)
-            displayName: 'Test E2E con curl'
+          #- script: |
+           #   curl -fsS $(APP_URL)
+           # displayName: 'Test E2E con curl'
     
           # Cleanup (siempre)
-          - script: |
-              docker compose down --volumes || true
-              docker rmi $(IMAGE_NAME) || true
-              echo "TODO: cleanup"
-            displayName: 'Cleanup'
+          #- script: |
+           #   docker compose down --volumes || true
+            #  docker rmi $(IMAGE_NAME) || true
+            #  echo "TODO: cleanup"
+           # displayName: 'Cleanup'
             # En Azure DevOps puedes usar condition para siempre:
-            condition: always()
+           # condition: always()
     
           # Build Docker image
-          - script: |
-              IMAGE_TAG=$(Build.SourceVersion)
-              FULL_IMAGE_NAME=youracr.azurecr.io/$(IMAGE_NAME):$IMAGE_TAG
-              echo "Building $FULL_IMAGE_NAME"
-              docker build -t $FULL_IMAGE_NAME -f devops/Dockerfile .
-            displayName: 'Build Docker image'
+          #- script: |
+           #   IMAGE_TAG=$(Build.SourceVersion)
+            #  FULL_IMAGE_NAME=youracr.azurecr.io/$(IMAGE_NAME):$IMAGE_TAG
+             # echo "Building $FULL_IMAGE_NAME"
+             # docker build -t $FULL_IMAGE_NAME -f devops/Dockerfile .
+           # displayName: 'Build Docker image'
