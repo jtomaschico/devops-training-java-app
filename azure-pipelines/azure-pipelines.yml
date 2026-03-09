@@ -88,10 +88,19 @@ stages:
     dependsOn: CI
     condition: eq('${{ parameters.RUN_CD }}', true)
     jobs:
-      - job: CD
-        displayName: "Continuous Deployment"
+      - job: deploy
+        displayName: "Deploy (simulado) + E2E"
+        pool:
+          vmImage: ubuntu-latest
         steps:
+          - checkout: self
           - script: |
-              echo "🚀 Desplegando aplicación..."
-              echo "Entorno de despliegue: ${{ parameters.DEPLOY_ENV }}"
-            displayName: "CD Steps"
+              echo "TODO (E8/E9): docker compose up -d java_app"
+              echo "TODO (E8/E9): curl -fsS $(APP_URL)"
+            displayName: "CD steps (TODO)"
+          - script: |
+              echo "TODO (E8/E6.5): cleanup siempre"
+              echo "TODO: docker compose down --volumes || true"
+              echo "TODO: docker rmi $(IMAGE_NAME) || true"
+            displayName: "Cleanup (TODO)"
+            condition: always()
