@@ -19,7 +19,7 @@ services:
     build: 
       context: .
       dockerfile: devops/Dockerfile
-    container_name: java_app
+    #container_name: java_app
     ports:
       - 8084:8080
   azp-agent:
@@ -67,6 +67,7 @@ services:
   #       aliases: 
 
   #         - sonardb
+
 
 
 
