@@ -1,8 +1,7 @@
 version: "3.8"
 
 networks:
-  java-project-net:
-    external: true 
+  java-project-net: 
     driver: bridge
     ipam:
       driver: default
@@ -68,6 +67,7 @@ services:
   #       aliases: 
 
   #         - sonardb
+
 
 
 
