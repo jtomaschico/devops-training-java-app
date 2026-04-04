@@ -1,6 +1,10 @@
 # Usamos una imagen base de Maven con OpenJDK
 FROM maven:3.8.6-openjdk-11-slim AS build
 
+#Metadatos
+LABEL maintainer= "bimation@gmail.com"
+LABEL description="Aplicación Java con Maven y Docker"
+
 # Definir el argumento de versión (usado para pasar el valor de VERSION en el build)
 ARG VERSION
 
@@ -11,11 +15,13 @@ RUN apt-get update && \
     apt-get install -y nodejs && \
     node -v && npm -v
 
+ENV APP_HOME=/home/app    
+
 # Copiar solo el archivo `pom.xml` para aprovechar el cache de Maven
 COPY pom.xml /home/app/pom.xml
 
 # Establecer el directorio de trabajo
-WORKDIR /home/app
+WORKDIR $APP_HOME
 
 # Descargar las dependencias de Maven (esto se puede cachear)
 RUN mvn dependency:go-offline
