@@ -34,15 +34,13 @@ RUN mvn versions:set -DnewVersion=${VERSION} && \
     mvn install
 
 # Stage de "Package" donde empaquetamos la aplicación con OpenJDK
-#FROM eclipse-temurin:11-jre-jammy
-FROM maven:3.8.6-openjdk-11-slim
+FROM eclipse-temurin:11-jre-jammy
 
 # Crear el usuario joseto (en caso de que se necesite para ejecutar la aplicación)
 RUN useradd -ms /bin/bash joseto
 
 # Establecer usuario
 USER joseto
-
 
 # Copiar el archivo JAR desde el contenedor anterior (con Maven)
 COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
