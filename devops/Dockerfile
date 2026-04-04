@@ -2,7 +2,7 @@
 FROM maven:3.8.6-openjdk-11-slim AS build
 
 #Metadatos
-LABEL maintainer="bimation@gmail.com"
+#LABEL maintainer="bimation@gmail.com"
 LABEL description="Aplicación Java con Maven y Docker"
 
 # Definir el argumento de versión (usado para pasar el valor de VERSION en el build)
