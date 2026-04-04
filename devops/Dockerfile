@@ -35,7 +35,7 @@ RUN mvn versions:set -DnewVersion=${VERSION} && \
 
 # Stage de "Package" donde empaquetamos la aplicación con OpenJDK
 #FROM eclipse-temurin:11-jre-jammy
-FROM openjdk:11-jre-slim
+FROM maven:3.8.6-openjdk-11-slim
 
 # Crear el usuario joseto (en caso de que se necesite para ejecutar la aplicación)
 RUN useradd -ms /bin/bash joseto
